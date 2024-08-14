@@ -1,17 +1,12 @@
-import { WebpayPlus } from 'transbank-sdk';
-import { Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes } from 'transbank-sdk';
+// src/pages/api/commitTransaction.json.js
+
+import { transaction } from '../../utils/transbankConfig';
 
 export async function get({ url }) {
   const token_ws = url.searchParams.get('token_ws');
 
-  const tx = new WebpayPlus.Transaction(new Options(
-    IntegrationCommerceCodes.WEBPAY_PLUS,
-    IntegrationApiKeys.WEBPAY,
-    Environment.Integration
-  ));
-
   try {
-    const response = await tx.commit(token_ws);
+    const response = await transaction.commit(token_ws);
 
     if (response.response_code === 0) {
       return new Response(

@@ -1,4 +1,4 @@
-// src/pages/api/createTransaction.json.ts
+// src/pages/api/createTransaction.json.js
 import { transaction } from '../../utils/transbankConfig';
 
 export async function POST({ request }) {
