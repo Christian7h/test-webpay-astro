@@ -1,0 +1,41 @@
+---
+import { useEffect, useState } from 'react';
+
+const [details, setDetails] = useState(null);
+
+useEffect(() => {
+  async function fetchDetails() {
+    const params = new URLSearchParams(window.location.search);
+    const token_ws = params.get('token_ws');
+
+    if (token_ws) {
+      const response = await fetch(`/api/commitTransaction?token_ws=${token_ws}`);
+      const data = await response.json();
+      setDetails(data.details);
+    }
+  }
+
+  fetchDetails();
+}, []);
+---
+
+<html>
+  <head>
+    <title>¡Pago Exitoso!</title>
+    <link rel="stylesheet" href="/path/to/tailwind.css" />
+  </head>
+  <body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-8">
+      <h1 class="text-4xl font-bold">¡Pago Exitoso!</h1>
+      {details ? (
+        <div class="mt-4">
+          <p>Gracias por tu compra. Aquí están los detalles de tu transacción:</p>
+          <pre class="bg-gray-800 p-4 rounded">{JSON.stringify(details, null, 2)}</pre>
+          <p class="mt-4">Tu número de orden es: <span class="font-semibold">{details.buy_order}</span></p>
+        </div>
+      ) : (
+        <p>Cargando detalles...</p>
+      )}
+    </div>
+  </body>
+</html>
