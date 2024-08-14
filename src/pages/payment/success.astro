@@ -31,7 +31,7 @@ useEffect(() => {
         <div class="mt-4">
           <p>Gracias por tu compra. Aquí están los detalles de tu transacción:</p>
           <pre class="bg-gray-800 p-4 rounded">{JSON.stringify(details, null, 2)}</pre>
-          <p class="mt-4">Tu número de orden es: <span class="font-semibold">{details.buy_order}</span></p>
+          <p class="mt-4">Tu número de orden es: <span class="font-semibold"></span></p>
         </div>
       ) : (
         <p>Cargando detalles...</p>
