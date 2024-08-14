@@ -1,4 +1,3 @@
-// src/utils/transbankConfig.js
 import { WebpayPlus, Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes } from 'transbank-sdk';
 
 const webpayOptions = new Options(

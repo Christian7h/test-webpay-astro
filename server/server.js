@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-const { transaction } = require('../src/utils/transbankConfig'); // Importa la configuración existente
+const { transaction } = require('../src/utils/transbankConfig');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,8 +11,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Ruta para iniciar una transacción de Webpay
-app.post('/api/initTransaction', async (req, res) => {
+// Ruta para crear una transacción de Webpay
+app.post('/api/createTransaction', async (req, res) => {
   try {
     const { buyOrder, sessionId, amount, returnUrl } = req.body;
     const response = await transaction.create(buyOrder, sessionId, amount, returnUrl);
@@ -22,7 +22,7 @@ app.post('/api/initTransaction', async (req, res) => {
   }
 });
 
-// Ruta para finalizar una transacción de Webpay
+// Ruta para confirmar una transacción de Webpay
 app.post('/api/commitTransaction', async (req, res) => {
   try {
     const { token } = req.body;
@@ -37,3 +37,9 @@ app.post('/api/commitTransaction', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+
+app.get('/api/test', (req, res) => {
+    res.send('API is working');
+  });
+  

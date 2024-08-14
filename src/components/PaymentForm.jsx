@@ -1,73 +1,63 @@
-// src/components/PaymentForm.jsx
 import React, { useState } from 'react';
 
-const PaymentForm = () => {
-  const [amount, setAmount] = useState('');
-  const [returnUrl, setReturnUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+function PaymentForm() {
+  const [amount, setAmount] = useState(423);
+  const [returnUrl, setReturnUrl] = useState('/');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
+  const handlePayment = async () => {
     try {
-      const response = await fetch('/api/initTransaction', {
+      const response = await fetch('/api/createTransaction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount, returnUrl }),
+        body: JSON.stringify({
+          buyOrder: 'order1234',
+          sessionId: 'session1234',
+          amount,
+          returnUrl,
+        }),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
-        window.location.href = data.url; // Redirige al usuario para completar la transacción
+        const data = await response.json();
+        window.location.href = `${data.url}?token_ws=${data.token}`;
       } else {
-        setError(data.error || 'Failed to initiate transaction');
+        console.error('Error initiating transaction:', response.statusText);
+        alert('An error occurred while initiating the transaction.');
       }
-    } catch (err) {
-      setError('An error occurred while initiating the transaction.');
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error('Error initiating transaction:', error);
+      alert('An error occurred while initiating the transaction.');
     }
   };
 
   return (
     <div>
-      <h2>Pay with Webpay Plus</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Amount:
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Return URL:
-            <input
-              type="text"
-              value={returnUrl}
-              onChange={(e) => setReturnUrl(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : 'Pay with Webpay Plus'}
-        </button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
+      <h1>Pay with Webpay Plus</h1>
+      <div>
+        <label>
+          Amount:
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Return URL:
+          <input
+            type="text"
+            value={returnUrl}
+            onChange={(e) => setReturnUrl(e.target.value)}
+          />
+        </label>
+      </div>
+      <button onClick={handlePayment}>Pay with Webpay Plus</button>
     </div>
   );
-};
+}
 
 export default PaymentForm;
